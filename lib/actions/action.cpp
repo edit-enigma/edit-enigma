@@ -46,7 +46,7 @@ void eActionMap::bindAction(const std::string &context, int64_t priority, int id
 {
 	eActionBinding bnd;
 
-	//eDebug("[eActionMap] bind widget to %s: prio=%d id=%d", context.c_str(), priority, id);
+	eDebug("[eActionMap] bind widget to %s: prio=%d id=%d", context.c_str(), priority, id);
 	bnd.m_context = context;
 	bnd.m_widget = widget;
 	bnd.m_id = id;
@@ -57,7 +57,7 @@ void eActionMap::bindAction(const std::string &context, int64_t priority, ePyObj
 {
 	eActionBinding bnd;
 
-	//eDebug("[eActionMap] bind function to %s: prio=%d", context.c_str(), priority);
+	eDebug("[eActionMap] bind function to %s: prio=%d", context.c_str(), priority);
 	bnd.m_context = context;
 	bnd.m_widget = 0;
 	Py_INCREF(function);
@@ -95,7 +95,7 @@ void eActionMap::unbindAction(const std::string &context, ePyObject function)
 void eActionMap::bindKey(const std::string &domain, const std::string &device, int key, int flags, const std::string &context, const std::string &action)
 {
 	// start searching the actionlist table
-	//eDebug("[eActionMap] bind key from %s to %s: domain=%s action=%s key=%d flags=%d", device.c_str(), context.c_str(), domain.c_str(), action.c_str(), key, flags);
+	eDebug("[eActionMap] bind key from %s to %s: domain=%s action=%s key=%d flags=%d", device.c_str(), context.c_str(), domain.c_str(), action.c_str(), key, flags);
 	unsigned int i;
 	for (i = 0; i < sizeof(actions)/sizeof(*actions); ++i)
 	{
@@ -152,7 +152,7 @@ void eActionMap::unbindPythonKey(const std::string &context, int key, const std:
 
 void eActionMap::bindTranslation(const std::string &domain, const std::string &device, int keyin, int keyout, int toggle)
 {
-	//eDebug("[eActionMap] bind translation for %s from %d to %d toggle=%d in %s", device.c_str(), keyin, keyout, toggle, domain.c_str());
+	eDebug("[eActionMap] bind translation for %s from %d to %d toggle=%d in %s", device.c_str(), keyin, keyout, toggle, domain.c_str());
 	eTranslationBinding trans;
 
 	trans.m_keyin  = keyin;
@@ -176,7 +176,7 @@ void eActionMap::bindTranslation(const std::string &domain, const std::string &d
 
 void eActionMap::bindToggle(const std::string &domain, const std::string &device, int togglekey)
 {
-	//eDebug("[eActionMap] bind togglekey for %s togglekey=%d in %s", device.c_str(), togglekey, domain.c_str());
+	eDebug("[eActionMap] bind togglekey for %s togglekey=%d in %s", device.c_str(), togglekey, domain.c_str());
 	std::map<std::string, eDeviceBinding>::iterator r = m_rcDevices.find(device);
 	if (r == m_rcDevices.end())
 	{
@@ -222,7 +222,7 @@ struct call_entry
 
 void eActionMap::keyPressed(const std::string &device, int key, int flags)
 {
-	//eDebug("[eActionMap] key from %s: %d %d", device.c_str(), key, flags);
+	eDebug("[eActionMap] key from %s: %d %d", device.c_str(), key, flags);
 
 	// Check for remotes that need key translations
 	std::map<std::string, eDeviceBinding>::iterator r = m_rcDevices.find(device);
