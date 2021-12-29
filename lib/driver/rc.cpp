@@ -64,8 +64,11 @@ void eRCShortDriver::keyPressed(int)
 		if (read(handle, &rccode, 2)!=2)
 			break;
 		if (enabled && !input->islocked())
+		{
+			eDebug("[eRCShortDriver] rccode : %x", rccode);
 			for (std::list<eRCDevice*>::iterator i(listeners.begin()); i!=listeners.end(); ++i)
 				(*i)->handleCode(rccode);
+		}
 	}
 }
 
@@ -97,8 +100,11 @@ void eRCInputEventDriver::keyPressed(int)
 		if (read(handle, &ev, sizeof(struct input_event))!=sizeof(struct input_event))
 			break;
 		if (enabled && !input->islocked())
+		{
+			eDebug("[eRCInputEventDriver] code : %x", ev.code);
 			for (std::list<eRCDevice*>::iterator i(listeners.begin()); i!=listeners.end(); ++i)
 				(*i)->handleCode((long)&ev);
+		}
 	}
 }
 
