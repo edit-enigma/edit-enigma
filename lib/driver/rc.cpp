@@ -138,6 +138,7 @@ eRCInputEventDriver::eRCInputEventDriver(const char *filename): eRCDriver(eRCInp
 		eDebugNoNewLine("\n");
 		eDebug("###################################################################################################");
 //#endif
+	eDebug("[eRCInputEventDriver] getDeviceName() : %s", getDeviceName());
 	m_remote_control = getDeviceName().find("remote control") != std::string::npos; /* assume remote control when name says so */
 	}
 }
