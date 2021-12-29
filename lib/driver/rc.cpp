@@ -110,7 +110,6 @@ void eRCInputEventDriver::keyPressed(int)
 
 eRCInputEventDriver::eRCInputEventDriver(const char *filename): eRCDriver(eRCInput::getInstance())
 {
-	eDebug("[eRCInputEventDriver] open %s", filename);
 	eDebug("[eRCInputEventDriver] open %s: %m", filename);
 	handle=open(filename, O_RDONLY|O_NONBLOCK);
 	if (handle<0)
@@ -125,7 +124,7 @@ eRCInputEventDriver::eRCInputEventDriver(const char *filename): eRCDriver(eRCInp
 		::ioctl(handle, EVIOCGBIT(EV_KEY, sizeof(keyCaps)), keyCaps);
 		memset(evCaps, 0, sizeof(evCaps));
 		::ioctl(handle, EVIOCGBIT(0, sizeof(evCaps)), evCaps);
-//#if DUMPKEYS
+#if DUMPKEYS
 		int i;
 		eDebug("###################################################################################################");
 		eDebugNoNewLineStart("[eRCInputEventDriver] %s keycaps: ", filename);
@@ -137,9 +136,9 @@ eRCInputEventDriver::eRCInputEventDriver(const char *filename): eRCDriver(eRCInp
 			eDebugNoNewLine(" %02X", evCaps[i]);
 		eDebugNoNewLine("\n");
 		eDebug("###################################################################################################");
-//#endif
-	eDebug("[eRCInputEventDriver] getDeviceName() : %s", getDeviceName());
-	m_remote_control = getDeviceName().find("remote control") != std::string::npos; /* assume remote control when name says so */
+#endif
+	m_remote_control = getDeviceName().find("BLE") != std::string::npos; /* assume remote control when name says so */
+//	m_remote_control = getDeviceName().find("remote control") != std::string::npos; /* assume remote control when name says so */
 	}
 }
 
@@ -147,7 +146,10 @@ std::string eRCInputEventDriver::getDeviceName()
 {
 	char name[128]="";
 	if (handle >= 0)
+	{
 		::ioctl(handle, EVIOCGNAME(128), name);
+		eDebug("[eRCInputEventDriver] name : %s, EVIOCGNAME: %m", name);
+	}
 #ifdef FORCE_ADVANCED_REMOTE
 	if (!strcmp(name, "dreambox remote control (native)")) return "dreambox advanced remote control (native)";
 #endif
