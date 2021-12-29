@@ -101,7 +101,7 @@ void eRCInputEventDriver::keyPressed(int)
 			break;
 		if (enabled && !input->islocked())
 		{
-			eDebug("[eRCInputEventDriver] code : %x", ev.code);
+			eDebug("[eRCInputEventDriver] type : %x, code : %x, type : %x", ev.value, ev.code, ev.type);
 			for (std::list<eRCDevice*>::iterator i(listeners.begin()); i!=listeners.end(); ++i)
 				(*i)->handleCode((long)&ev);
 		}
@@ -110,6 +110,8 @@ void eRCInputEventDriver::keyPressed(int)
 
 eRCInputEventDriver::eRCInputEventDriver(const char *filename): eRCDriver(eRCInput::getInstance())
 {
+	eDebug("[eRCInputEventDriver] open %s", filename);
+	eDebug("[eRCInputEventDriver] open %s: %m", filename);
 	handle=open(filename, O_RDONLY|O_NONBLOCK);
 	if (handle<0)
 	{
@@ -123,8 +125,9 @@ eRCInputEventDriver::eRCInputEventDriver(const char *filename): eRCDriver(eRCInp
 		::ioctl(handle, EVIOCGBIT(EV_KEY, sizeof(keyCaps)), keyCaps);
 		memset(evCaps, 0, sizeof(evCaps));
 		::ioctl(handle, EVIOCGBIT(0, sizeof(evCaps)), evCaps);
-#if DUMPKEYS
+//#if DUMPKEYS
 		int i;
+		eDebug("###################################################################################################");
 		eDebugNoNewLineStart("[eRCInputEventDriver] %s keycaps: ", filename);
 		for (i = 0; i< sizeof(keyCaps); i++)
 			eDebugNoNewLine(" %02X", keyCaps[i]);
@@ -133,7 +136,8 @@ eRCInputEventDriver::eRCInputEventDriver(const char *filename): eRCDriver(eRCInp
 		for (i = 0; i< sizeof(evCaps); i++)
 			eDebugNoNewLine(" %02X", evCaps[i]);
 		eDebugNoNewLine("\n");
-#endif
+		eDebug("###################################################################################################");
+//#endif
 	m_remote_control = getDeviceName().find("remote control") != std::string::npos; /* assume remote control when name says so */
 	}
 }
