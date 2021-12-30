@@ -101,7 +101,7 @@ void eRCInputEventDriver::keyPressed(int)
 			break;
 		if (enabled && !input->islocked())
 		{
-			eDebug("[eRCInputEventDriver] type : %x, code : %x, type : %x", ev.value, ev.code, ev.type);
+			eDebug("[eRCInputEventDriver] handle : %d, type : %x, code : %x, type : %x", handle, ev.value, ev.code, ev.type);
 			for (std::list<eRCDevice*>::iterator i(listeners.begin()); i!=listeners.end(); ++i)
 				(*i)->handleCode((long)&ev);
 		}
@@ -110,8 +110,8 @@ void eRCInputEventDriver::keyPressed(int)
 
 eRCInputEventDriver::eRCInputEventDriver(const char *filename): eRCDriver(eRCInput::getInstance())
 {
-	eDebug("[eRCInputEventDriver] open %s: %m", filename);
 	handle=open(filename, O_RDONLY|O_NONBLOCK);
+	eDebug("[eRCInputEventDriver] open %s, handle %d : %m", filename, handle);
 	if (handle<0)
 	{
 		eDebug("[eRCInputEventDriver] cannot open %s: %m", filename);
@@ -147,7 +147,7 @@ std::string eRCInputEventDriver::getDeviceName()
 	if (handle >= 0)
 	{
 		::ioctl(handle, EVIOCGNAME(128), name);
-		eDebug("[eRCInputEventDriver] name : %s, EVIOCGNAME: %m", name);
+		eDebug("[eRCInputEventDriver] name : %s, handle : %d, EVIOCGNAME: %m", name, handle);
 	}
 #ifdef FORCE_ADVANCED_REMOTE
 	if (!strcmp(name, "dreambox remote control (native)")) return "dreambox advanced remote control (native)";
