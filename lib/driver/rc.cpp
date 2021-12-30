@@ -94,16 +94,20 @@ eRCShortDriver::~eRCShortDriver()
 
 void eRCInputEventDriver::keyPressed(int)
 {
-	struct input_event ev;
+//	struct input_event ev;
+	uint16_t rccode;
 	while (1)
 	{
-		if (read(handle, &ev, sizeof(struct input_event))!=sizeof(struct input_event))
+		if (read(handle, &rccode, sizeof(rccode))!=sizeof(rccode))
+//		if (read(handle, &ev, sizeof(struct input_event))!=sizeof(struct input_event))
 			break;
 		if (enabled && !input->islocked())
 		{
-			eDebug("[eRCInputEventDriver] type : %x, code : %x, type : %x", ev.value, ev.code, ev.type);
+			eDebug("[eRCShortDriver] rccode : %x", rccode);
+//			eDebug("[eRCInputEventDriver] type : %x, code : %x, type : %x", ev.value, ev.code, ev.type);
 			for (std::list<eRCDevice*>::iterator i(listeners.begin()); i!=listeners.end(); ++i)
-				(*i)->handleCode((long)&ev);
+//				(*i)->handleCode((long)&ev);
+				(*i)->handleCode(rccode);
 		}
 	}
 }
@@ -137,8 +141,7 @@ eRCInputEventDriver::eRCInputEventDriver(const char *filename): eRCDriver(eRCInp
 		eDebugNoNewLine("\n");
 		eDebug("###################################################################################################");
 #endif
-	m_remote_control = getDeviceName().find("BLE") != std::string::npos; /* assume remote control when name says so */
-//	m_remote_control = getDeviceName().find("remote control") != std::string::npos; /* assume remote control when name says so */
+	m_remote_control = getDeviceName().find("remote control") != std::string::npos; /* assume remote control when name says so */
 	}
 }
 
