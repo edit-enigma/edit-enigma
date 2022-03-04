@@ -380,6 +380,31 @@ void eHdmiCEC::hdmiEvent(int what)
 				eDebugNoNewLine(" %02X", rxmessage.data[i]);
 			}
 			eDebugNoNewLine("\n");
+#if 1 // wimp : test hdmi cec
+			eDebug("[eHdmiCEC] rxmessage.length : %d \n", rxmessage.length);
+			if((rxmessage.data[0] == 0x44) && (rxmessage.length > 2))
+			{
+				switch(rxmessage.length)
+				{
+					case 3:
+						rxmessage.data[1] = 0x02;
+						rxmessage.length = 2;
+						break;
+					case 4:
+						rxmessage.data[1] = 0x03;
+						rxmessage.length = 2;
+						break;
+					case 5:
+						rxmessage.data[1] = 0x04;
+						rxmessage.length = 2;
+						break;
+					case 14:
+						rxmessage.data[1] = 0x0d;
+						rxmessage.length = 2;
+						break;
+				}
+			}
+#endif
 			bool hdmicec_report_active_menu = eConfigManager::getConfigBoolValue("config.hdmicec.report_active_menu", false);
 			if (hdmicec_report_active_menu)
 			{
